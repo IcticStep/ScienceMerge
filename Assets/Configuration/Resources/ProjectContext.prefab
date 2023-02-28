@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4607362566085075469}
   - component: {fileID: 4738026600143809462}
+  - component: {fileID: -2623596701901895935}
+  - component: {fileID: 1676859780966086662}
   m_Layer: 0
   m_Name: ProjectContext
   m_TagString: Untagged
@@ -45,7 +47,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers: []
-  _monoInstallers: []
+  _monoInstallers:
+  - {fileID: -2623596701901895935}
+  - {fileID: 1676859780966086662}
   _installerPrefabs: []
   _parentNewObjectsUnderContext: 0
   _editorReflectionBakingCoverageMode: 0
@@ -60,3 +64,30 @@ MonoBehaviour:
       _missingHandlerDefaultResponse: 2
       _requireStrictUnsubscribe: 0
       _defaultAsyncTickPriority: 1
+--- !u!114 &-2623596701901895935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3938170029271546153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d988d1bd3c5b09c489cc8df4d6350559, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cardsConfiguration: {fileID: 11400000, guid: 714312704a757db4cacbb210158b8678, type: 2}
+  _inventoryConfiguration: {fileID: 11400000, guid: 901f530b2c2bcfa4e92865e160ad0a4b, type: 2}
+  _cardViewPrefab: {fileID: 1173382219892950355, guid: ecaec4443ca5aef4fb3ce3b782dd4943, type: 3}
+--- !u!114 &1676859780966086662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3938170029271546153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c06203fa2f0e44728f248593389d5c56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
