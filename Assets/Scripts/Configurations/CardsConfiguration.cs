@@ -10,7 +10,7 @@ namespace Configurations
         [SerializeField]
         private List<CardSettings> _cardSetting;
 
-        public IEnumerable<CardSettings> CardSettingsList => _cardSetting;
+        public IReadOnlyList<CardSettings> CardSettingsList => _cardSetting;
 
         public CardSettings this[int id] => 
             CardSettingsList.First(card => card.Id == id);

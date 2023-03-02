@@ -9,6 +9,6 @@ namespace Configurations
         [SerializeField] 
         private List<MergeRule> _mergeRules;
 
-        public IEnumerable<MergeRule> MergeRules => _mergeRules;
+        public IReadOnlyList<MergeRule> MergeRules => _mergeRules;
     }
 }

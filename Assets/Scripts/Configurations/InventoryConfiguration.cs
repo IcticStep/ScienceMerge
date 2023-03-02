@@ -9,6 +9,6 @@ namespace Configurations
         [SerializeField]
         private List<InventoryCardRule> _startCards;
 
-        public IEnumerable<InventoryCardRule> StartCards => _startCards;
+        public IReadOnlyList<InventoryCardRule> StartCards => _startCards;
     }
 }
