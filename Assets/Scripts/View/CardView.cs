@@ -2,6 +2,7 @@
 using Model;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 namespace View
@@ -11,7 +12,7 @@ namespace View
         [Inject]
         private void Construct(CardsConfiguration cardsConfiguration) => _cardsConfiguration = cardsConfiguration;
         
-        [SerializeField] private SpriteRenderer _resourceImage;
+        [SerializeField] private Image _resourceImage;
         [SerializeField] private TMP_Text _titleText;
         [SerializeField] private TMP_Text _timeText;
         
