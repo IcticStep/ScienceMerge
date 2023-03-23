@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Configurations
@@ -6,11 +7,12 @@ namespace Configurations
     [Serializable]
     public class MergeRule
     {
-        [field: SerializeField]
-        public int Card1ID { get; private set; }
-        [field: SerializeField]
-        public int Card2ID { get; private set; }
+        [field: SerializeField] 
+        private List<int> _cardsID;
+        
         [field: SerializeField]
         public int ResultID { get; private set; }
+
+        public IReadOnlyList<int> CardsID => _cardsID;
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Configurations;
 using Zenject;
 
-namespace Model
+namespace Model.Inventory
 {
     [Serializable]
     public class Inventory : IInventory

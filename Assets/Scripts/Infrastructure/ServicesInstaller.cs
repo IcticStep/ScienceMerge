@@ -1,4 +1,5 @@
 ﻿using Model;
+using Model.Inventory;
 using Zenject;
 
 namespace Infrastructure
@@ -9,6 +10,8 @@ namespace Infrastructure
         {
             BindService<CardCreator>();
             BindService<Inventory>();
+            BindService<Hand>();
+            BindService<MergeTablesContainer>();
         }
         
         private void BindService<T>() =>

@@ -1,5 +1,7 @@
 ﻿using Model;
+using Model.Inventory;
 using UnityEngine;
+using View.Cards;
 using Zenject;
 
 namespace View
