@@ -35,6 +35,11 @@ namespace View.Cards
             }
         }
 
+        public void Disable()
+        {
+            Card = null;
+        }
+
         private void UpdateVisualisation()
         {
             if (_card is null)
@@ -65,5 +70,6 @@ namespace View.Cards
         {
             gameObject.SetActive(false);
         }
+        
     }
 }

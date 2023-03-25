@@ -39,20 +39,20 @@ namespace View.MergeTables
                 MergeTable.OnStateChanged -= UpdateView;
         }
 
-        // TODO: analyze code
         private void UpdateView()
         {
             var cards = MergeTable.Cards;
-            
+
+           
             for (var i = 0; i < _cardViews.Length; i++)
             {
                 if (i >= cards.Count)
                 {
-                    _cardViews[i].Card = null;
+                    _cardViews[i].Disable();
                     continue;
                 }
                 
-                _cardViews[i].Card = cards?[i];
+                _cardViews[i].Card = cards[i];
             }
         }
     }
