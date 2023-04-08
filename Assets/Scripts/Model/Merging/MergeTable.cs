@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Model.Cards;
 
-namespace Model.MergeTable
+namespace Model.Merging
 {
     public class MergeTable
     {
@@ -19,6 +20,7 @@ namespace Model.MergeTable
                 throw new InvalidOperationException("Impossible to put card over limit.");
 
             _cards.Add(card);
+            OnStateChanged?.Invoke();
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Configurations;
-using Model;
+using Model.Cards;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;

@@ -1,6 +1,6 @@
 using System;
 
-namespace Model
+namespace Model.Cards
 {
     public class Card
     {

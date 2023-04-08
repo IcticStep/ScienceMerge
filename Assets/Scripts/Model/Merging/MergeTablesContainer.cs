@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Model
+namespace Model.Merging
 {
     public class MergeTablesContainer
     {
         public MergeTablesContainer() => CreateStartTables();
         
         public event Action OnStateChanged;
-        public IReadOnlyList<MergeTable.MergeTable> MergeTables => _mergeTables;
-        
+
         private const int StartTableAmount = 2;
-        private readonly List<MergeTable.MergeTable> _mergeTables = new();
+        private readonly List<MergeTable> _mergeTables = new();
+        
+        public IReadOnlyList<MergeTable> MergeTables => _mergeTables;
 
         private void CreateStartTables()
         {
@@ -21,7 +22,7 @@ namespace Model
 
         public void AddNewTable()
         {
-            _mergeTables.Add(new MergeTable.MergeTable());
+            _mergeTables.Add(new MergeTable());
             OnStateChanged?.Invoke();
         }
     }

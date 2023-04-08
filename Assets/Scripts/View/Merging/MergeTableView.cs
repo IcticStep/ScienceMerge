@@ -1,15 +1,17 @@
-﻿using System.Linq;
-using Model;
-using Model.MergeTable;
+﻿using Model.Cards;
+using Model.Merging;
 using UnityEngine;
 using View.Cards;
 
-namespace View.MergeTables
+namespace View.Merging
 {
+    [RequireComponent(typeof(RectTransform))]
     public class MergeTableView : MonoBehaviour
     {
         [SerializeField] private CardView[] _cardViews;
+        
         private MergeTable _mergeTable;
+        public RectTransform RectTransform { get; private set; }
 
         public MergeTable MergeTable
         {
@@ -28,10 +30,7 @@ namespace View.MergeTables
             }
         }
 
-        public void AddCard(Card card)
-        {
-            _mergeTable.AddCard(card);
-        }
+        private void Awake() => RectTransform = GetComponent<RectTransform>();
 
         private void OnDisable()
         {
@@ -43,7 +42,6 @@ namespace View.MergeTables
         {
             var cards = MergeTable.Cards;
 
-           
             for (var i = 0; i < _cardViews.Length; i++)
             {
                 if (i >= cards.Count)
@@ -54,6 +52,11 @@ namespace View.MergeTables
                 
                 _cardViews[i].Card = cards[i];
             }
+        }
+
+        public void AddCard(Card card)
+        {
+            _mergeTable.AddCard(card);
         }
     }
 }

@@ -1,10 +1,8 @@
-using System;
 using Configurations;
 using UnityEngine;
-using View;
 using Zenject;
 
-namespace Infrastructure
+namespace Infrastructure.Global
 {
     public class ConfigurationsInstaller : MonoInstaller
     {

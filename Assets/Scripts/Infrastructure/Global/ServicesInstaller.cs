@@ -1,8 +1,10 @@
 ﻿using Model;
-using Model.Inventory;
+using Model.Cards;
+using Model.Merging;
+using Model.Storage;
 using Zenject;
 
-namespace Infrastructure
+namespace Infrastructure.Global
 {
     public class ServicesInstaller : MonoInstaller
     {

@@ -2,7 +2,7 @@
 using Configurations;
 using Zenject;
 
-namespace Model
+namespace Model.Cards
 {
     public class CardCreator
     {

@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9f16188bb084b5190897fbe97d2ccff, type: 3}
   m_Name: MergeConfiguration
   m_EditorClassIdentifier: 
-  _mergeRules: []
+  _mergeRules:
+  - _cardsID: 0000000001000000
+    <ResultID>k__BackingField: 4

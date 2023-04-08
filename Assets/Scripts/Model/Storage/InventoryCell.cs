@@ -1,6 +1,7 @@
 ﻿using System;
+using Model.Cards;
 
-namespace Model.Inventory
+namespace Model.Storage
 {
     public class InventoryCell
     {
@@ -32,15 +33,27 @@ namespace Model.Inventory
                 card = null;
                 return false;
             }
-
+            
+            if(!_forceInfinity) _count--;
+            
             UpdateState();
             card = Card;
             return true;
         }
 
+        public void RemoveCard()
+        {
+            if (!HasCards)
+                throw new InvalidOperationException("There is no cards.");
+            
+            if(!_forceInfinity) _count--;
+            UpdateState();
+        }
+
         public void UpdateState()
         {
-            _count--;
+            if(_forceInfinity)
+                return;
             
             OnCountChanged?.Invoke();
             

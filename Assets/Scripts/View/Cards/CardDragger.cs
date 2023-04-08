@@ -1,4 +1,4 @@
-﻿using Model;
+﻿using Model.Cards;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Zenject;
@@ -9,7 +9,8 @@ namespace View.Cards
     public class CardDragger : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
     {
         [Inject]
-        private void Construct(HandView handView) => (_handView) = (handView);
+        private void Construct(HandView handView) =>
+            (_handView) = (handView);
 
         private Camera _mainCamera;
         private CardView _currentUICard;
@@ -36,7 +37,8 @@ namespace View.Cards
             _handView.UpdateHoldingPosition(position);
         }
 
-        public void OnEndDrag(PointerEventData eventData) => _handView.DropCard();
+        public void OnEndDrag(PointerEventData eventData) => 
+            _handView.DropCard(eventData.position);
 
         private Vector2 GetDragWorldPosition(PointerEventData eventData) =>
             _mainCamera.ScreenToWorldPoint(eventData.position);

@@ -1,10 +1,9 @@
-﻿using Model;
-using Model.Inventory;
+﻿using Model.Storage;
 using UnityEngine;
 using View.Cards;
 using Zenject;
 
-namespace View
+namespace View.Storage
 {
     public class InventoryView : MonoBehaviour
     {
