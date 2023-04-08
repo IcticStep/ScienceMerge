@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Infrastructure.Cameras;
+using Model.Cards;
 using Model.Merging;
 using UnityEngine;
 using Zenject;
@@ -11,28 +13,25 @@ namespace View.Merging
     {
         [Inject]
         private void Construct(MergeTablesContainer mergeTablesContainer, DiContainer diContainer, 
-            [Inject(Id = CamerasIDs.HandCamera)] Camera handCamera) =>
-            (_mergeTablesContainer, _diContainer, _handCamera) =
-            (mergeTablesContainer, diContainer, handCamera);
-
+            [Inject(Id = CamerasIDs.HandCamera)] Camera handCamera)
+        {
+            _mergeTablesContainer = mergeTablesContainer;
+            _diContainer = diContainer;
+            _handCamera = handCamera;
+        }
 
         [SerializeField] 
         private MergeTableView _mergeTableViewPrefab;
-
+        
         private readonly List<MergeTableView> _mergeTableViews = new();
         private MergeTablesContainer _mergeTablesContainer;
         private DiContainer _diContainer;
         private Camera _handCamera;
 
-        [field:SerializeField]
-        public Canvas MergeCanvas { get; private set; }
         public IReadOnlyList<MergeTableView> MergeTableViews => _mergeTableViews;
 
         private void OnEnable() => _mergeTablesContainer.OnStateChanged += UpdateView;
         private void OnDisable() => _mergeTablesContainer.OnStateChanged -= UpdateView;
-
-        private void Awake() => 
-            MergeCanvas.GetComponent<RectTransform>();
 
         private void Start() => UpdateView();
 
@@ -51,13 +50,36 @@ namespace View.Merging
         private void UpdateView()
         {
             var mergeTables = _mergeTablesContainer.MergeTables;
-            foreach (var mergeTable in mergeTables)
+            GetEnoughViews(mergeTables);
+
+            for (var i = 0; i < mergeTables.Count; i++)
+                _mergeTableViews[i].MergeTable = mergeTables[i];
+        }
+
+        private void GetEnoughViews(IReadOnlyList<MergeTable> tables)
+        {
+            if (tables.Count == _mergeTableViews.Count) return;
+
+            AddMissingViews(tables);
+            DestroyExtraViews(tables);
+        }
+
+        private void DestroyExtraViews(IReadOnlyList<MergeTable> tables)
+        {
+            while (tables.Count < _mergeTableViews.Count)
+            {
+                Destroy(_mergeTableViews[^1]);
+                _mergeTableViews.RemoveAt(_mergeTableViews.Count - 1);
+            }
+        }
+
+        private void AddMissingViews(IReadOnlyList<MergeTable> tables)
+        {
+            while (tables.Count > _mergeTableViews.Count)
             {
                 var view = _diContainer
                     .InstantiatePrefabForComponent<MergeTableView>(
                         _mergeTableViewPrefab, transform);
-                
-                view.MergeTable = mergeTable;
                 _mergeTableViews.Add(view);
             }
         }

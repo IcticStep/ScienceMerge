@@ -6,13 +6,19 @@ using Zenject;
 
 namespace Model
 {
-    public class Hand
+    public class Hand : IDisposable
     {
         [Inject]
-        public Hand(Inventory inventory) => 
-            (_inventory) = (inventory);
+        public Hand(Inventory inventory, MergeTablesContainer mergeTablesContainer)
+        {
+            _inventory = inventory;
+            _mergeTablesContainer = mergeTablesContainer;
+            
+            _mergeTablesContainer.OnAnyCardRewarded += AddCardToInventory;
+        }
 
-        private Inventory _inventory;
+        private readonly Inventory _inventory;
+        private readonly MergeTablesContainer _mergeTablesContainer;
         private Card _card;
 
         public Card Card
@@ -32,5 +38,9 @@ namespace Model
             mergeTable.AddCard(Card);
             Card = default;
         }
+
+        private void AddCardToInventory(Card card) => _inventory.InsertCard(card);
+
+        public void Dispose() => _mergeTablesContainer.OnAnyCardRewarded -= AddCardToInventory;
     }
 }

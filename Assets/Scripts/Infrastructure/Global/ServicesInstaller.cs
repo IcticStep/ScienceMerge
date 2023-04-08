@@ -12,8 +12,8 @@ namespace Infrastructure.Global
         {
             BindService<CardCreator>();
             BindService<Inventory>();
-            BindService<Hand>();
             BindService<MergeTablesContainer>();
+            BindService<Hand>();
         }
         
         private void BindService<T>() =>
