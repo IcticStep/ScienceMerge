@@ -64,15 +64,6 @@ namespace View.Merging
             DestroyExtraViews(tables);
         }
 
-        private void DestroyExtraViews(IReadOnlyList<MergeTable> tables)
-        {
-            while (tables.Count < _mergeTableViews.Count)
-            {
-                Destroy(_mergeTableViews[^1]);
-                _mergeTableViews.RemoveAt(_mergeTableViews.Count - 1);
-            }
-        }
-
         private void AddMissingViews(IReadOnlyList<MergeTable> tables)
         {
             while (tables.Count > _mergeTableViews.Count)
@@ -81,6 +72,15 @@ namespace View.Merging
                     .InstantiatePrefabForComponent<MergeTableView>(
                         _mergeTableViewPrefab, transform);
                 _mergeTableViews.Add(view);
+            }
+        }
+
+        private void DestroyExtraViews(IReadOnlyList<MergeTable> tables)
+        {
+            while (tables.Count < _mergeTableViews.Count)
+            {
+                Destroy(_mergeTableViews[^1]);
+                _mergeTableViews.RemoveAt(_mergeTableViews.Count - 1);
             }
         }
     }

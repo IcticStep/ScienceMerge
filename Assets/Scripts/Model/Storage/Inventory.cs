@@ -23,7 +23,7 @@ namespace Model.Storage
         private readonly InventoryConfiguration _inventoryConfiguration;
         private readonly CardCreator _cardCreator;
         
-        public IEnumerable<InventoryCell> Cells => _cells;
+        public IReadOnlyList<InventoryCell> Cells => _cells;
         
         public bool HasCard(Card card) => 
             Cells.Any(cell => cell.Card == card);
@@ -32,22 +32,32 @@ namespace Model.Storage
 
         public bool TryTakeCard(int id, out Card card)
         {
-            card = FindCellWithCard(id).Card;
+            card = FindCellWithCard(id)?.Card;
             
             return card is not null;
         }
 
         private InventoryCell FindCellWithCard(int id) =>
-            Cells.First(cell => cell.Card.Id == id);
+            Cells.FirstOrDefault(cell => cell.Card.Id == id);
 
         public void RemoveCard(Card card)
         {
             var cell = FindCellWithCard(card.Id);
+            cell.RemoveCard();
+            OnStateChanged?.Invoke();
         }
 
         public void InsertCard(Card card)
         {
-            throw new NotImplementedException();
+            var cell = FindCellWithCard(card.Id);
+            if(cell is not null)
+            {
+                cell.TryInsertCard(card);
+                OnStateChanged?.Invoke();
+                return;
+            }
+            
+            _cells.Add(new(card));
             OnStateChanged?.Invoke();
         }
 

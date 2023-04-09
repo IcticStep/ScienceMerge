@@ -5,8 +5,15 @@ namespace Model.Storage
 {
     public class InventoryCell
     {
-        public InventoryCell(Card card, int count = 1, bool forceInfinity = false) => 
-            (Card, _count, _forceInfinity) = (card, count, forceInfinity);
+        public InventoryCell(Card card, int count = 1, bool forceInfinity = false)
+        {
+            Card = card;
+            _count = count;
+            _forceInfinity = forceInfinity;
+            
+            if(_forceInfinity)
+                _count = int.MaxValue;
+        }
 
         private int _count;
         private readonly bool _forceInfinity;
@@ -22,7 +29,8 @@ namespace Model.Storage
             if (Card.Id != card.Id)
                 return false;
 
-            _count++;
+            if(!_forceInfinity) _count++;
+            UpdateState();
             return true;
         }
         
