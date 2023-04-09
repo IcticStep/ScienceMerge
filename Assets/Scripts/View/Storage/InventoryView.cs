@@ -34,7 +34,7 @@ namespace View.Storage
             for (var i = 0; i < inventoryCells.Count; i++)
             {
                 _views[i].Card = inventoryCells[i].Card;
-                _views[i].SetCount(inventoryCells[i].Count);                
+                _views[i].SetCountText(inventoryCells[i].Count);                
             }
         }
 

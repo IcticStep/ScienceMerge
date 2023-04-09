@@ -9,7 +9,7 @@ using Zenject;
 
 namespace View.Merging
 {
-    public class MergeTableViewsContainer : MonoBehaviour
+    public class MergeTableContainerView : MonoBehaviour
     {
         [Inject]
         private void Construct(MergeTablesContainer mergeTablesContainer, DiContainer diContainer, 

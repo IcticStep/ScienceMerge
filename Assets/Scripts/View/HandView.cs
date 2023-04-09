@@ -12,15 +12,15 @@ namespace View
     public class HandView : MonoBehaviour
     {
         [Inject]
-        private void Construct(DiContainer diContainer, Hand hand, MergeTableViewsContainer mergeTableViewsContainer) => 
-            (_diContainer, _hand, _mergeTableViewsContainer) = (diContainer, hand, mergeTableViewsContainer);
+        private void Construct(DiContainer diContainer, Hand hand, MergeTableContainerView mergeTableContainerView) => 
+            (_diContainer, _hand, _mergeTableContainerView) = (diContainer, hand, mergeTableContainerView);
 
         [SerializeField] private CardView _draggingCardPrefab;
         [SerializeField] private float _tablePutRange = 300;
         
         private DiContainer _diContainer;
         private Hand _hand;
-        private MergeTableViewsContainer _mergeTableViewsContainer;
+        private MergeTableContainerView _mergeTableContainerView;
         private CardView _draggingCard;
         private Transform _cardTransform;
 
@@ -53,7 +53,7 @@ namespace View
 
         private MergeTable GetMergeTableInCardRange(Vector2 screenPosition)
         {
-            var distances = _mergeTableViewsContainer
+            var distances = _mergeTableContainerView
                 .GetDistancesToTables(screenPosition);
             var closest = distances.First();
             

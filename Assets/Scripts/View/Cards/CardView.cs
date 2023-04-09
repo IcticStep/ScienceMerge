@@ -3,7 +3,6 @@ using Model.Cards;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Zenject;
 
@@ -41,13 +40,13 @@ namespace View.Cards
 
         public void Disable() => Card = null;
 
-        public void SetCount(int count)
+        public void SetCountText(int count)
         {
             _cardsCountText.gameObject.SetActive(true);
             _cardsCountText.text = (count == int.MaxValue) ? InfinityLabel : count.ToString();
         }
         
-        public void HideCount() => _cardsCountText.gameObject.SetActive(false);
+        public void HideCountText() => _cardsCountText.gameObject.SetActive(false);
 
         private void UpdateVisualisation()
         {
@@ -58,16 +57,23 @@ namespace View.Cards
             }
 
             MakeVisible();
-            
-            var cardSettings = _cardsConfiguration[_card.Id];
+            UpdateImages();
+            UpdateTexts();
+        }
 
+        private void UpdateTexts()
+        {
+            _titleText.text = _card.Name;
+            _timeText.text = _card.MergeTime.ToString();
+        }
+
+        private void UpdateImages()
+        {
+            var cardSettings = _cardsConfiguration[_card.Id];
             if (_resourceImage != null)
                 _resourceImage.sprite = cardSettings.Sprite;
             if (_resourceRenderer != null)
                 _resourceRenderer.sprite = cardSettings.Sprite;
-
-            _titleText.text = _card.Name;
-            _timeText.text = _card.MergeTime.ToString();
         }
 
         private void MakeVisible() => gameObject.SetActive(true);

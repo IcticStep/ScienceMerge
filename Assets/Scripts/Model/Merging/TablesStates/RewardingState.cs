@@ -22,7 +22,7 @@ namespace Model.Merging.TablesStates
         public override void HandleTouch()
         {
             Context.RewardWithCard(Cards.First());
-            RemoveCards();
+            Cards.Clear();
             SetState(new CardsInputState(Context, Cards, StateSetter));
             Refresh();
         }
@@ -30,7 +30,7 @@ namespace Model.Merging.TablesStates
         private void SetResult()
         {
             var result = CardCreator.InstantiateCardByMerge(Cards);
-            RemoveCards();
+            Cards.Clear();
 
             if (result is null)
             {
@@ -42,7 +42,5 @@ namespace Model.Merging.TablesStates
             Cards.Add(result);
             Refresh();
         }
-
-        private void RemoveCards() => Cards.RemoveAll(_ => true);
     }
 }

@@ -64,7 +64,8 @@ namespace View.Merging
 
             for (var i = 0; i < _cardViews.Length; i++)
             {
-                if (i >= cards.Count)
+                var noCards = i >= cards.Count;
+                if (noCards)
                 {
                     _cardViews[i].Disable();
                     continue;
