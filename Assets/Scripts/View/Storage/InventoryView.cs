@@ -30,9 +30,12 @@ namespace View.Storage
             var inventoryCells = _inventory.Cells;
             
             GetEnoughViews(inventoryCells);
-            
+
             for (var i = 0; i < inventoryCells.Count; i++)
+            {
                 _views[i].Card = inventoryCells[i].Card;
+                _views[i].SetCount(inventoryCells[i].Count);                
+            }
         }
 
         private void GetEnoughViews(IReadOnlyList<InventoryCell> inventoryCells)

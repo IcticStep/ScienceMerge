@@ -3,6 +3,7 @@ using Model.Cards;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Zenject;
 
@@ -12,14 +13,17 @@ namespace View.Cards
     {
         [Inject]
         private void Construct(CardsConfiguration cardsConfiguration) => _cardsConfiguration = cardsConfiguration;
-        
+
         [Header("Visualisation(choose any)")]
         [SerializeField] private Image _resourceImage;
         [SerializeField] private SpriteRenderer _resourceRenderer;
-        
+
         [Header("Texts(choose all)")]
         [SerializeField] private TMP_Text _titleText;
         [SerializeField] private TMP_Text _timeText;
+        [SerializeField] private TMP_Text _cardsCountText;
+        
+        private const string InfinityLabel = "∞";
 
         private CardsConfiguration _cardsConfiguration;
         private Card _card;
@@ -35,10 +39,15 @@ namespace View.Cards
             }
         }
 
-        public void Disable()
+        public void Disable() => Card = null;
+
+        public void SetCount(int count)
         {
-            Card = null;
+            _cardsCountText.gameObject.SetActive(true);
+            _cardsCountText.text = (count == int.MaxValue) ? InfinityLabel : count.ToString();
         }
+        
+        public void HideCount() => _cardsCountText.gameObject.SetActive(false);
 
         private void UpdateVisualisation()
         {
@@ -61,15 +70,8 @@ namespace View.Cards
             _timeText.text = _card.MergeTime.ToString();
         }
 
-        private void MakeVisible()
-        {
-            gameObject.SetActive(true);
-        }
+        private void MakeVisible() => gameObject.SetActive(true);
 
-        private void MakeInvisible()
-        {
-            gameObject.SetActive(false);
-        }
-        
+        private void MakeInvisible() => gameObject.SetActive(false);
     }
 }
