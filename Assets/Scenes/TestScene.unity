@@ -643,7 +643,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mergeTableViewPrefab: {fileID: 7032136829832698646, guid: 64f3ab89b9bf4234bbe876c31fddbb39, type: 3}
-  <MergeCanvas>k__BackingField: {fileID: 1477461615}
 --- !u!114 &1323135330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -815,7 +814,7 @@ MonoBehaviour:
   _handView: {fileID: 1733600141}
   _mainCamera: {fileID: 519420031}
   _handCamera: {fileID: 810106722}
-  _mergeTableViewsContainer: {fileID: 1323135329}
+  _mergeTableContainerView: {fileID: 1323135329}
 --- !u!1 &1366597437
 GameObject:
   m_ObjectHideFlags: 0
