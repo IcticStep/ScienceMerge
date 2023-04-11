@@ -10,40 +10,38 @@ namespace Model.Merging.TablesStates
     public class MergingState : BaseState, IDisposable
     {
         public readonly TimeSpan TimerInterval = TimeSpan.FromSeconds(1);
-        private CompositeDisposable _disposables;
-        public TimeSpan TimerLeft { get; private set; } = new();
+        public TimeSpan TimerLeft { get; private set; }
+        
+        private IDisposable _timerObject = new CompositeDisposable();
 
         public MergingState(MergeTable context, List<Card> contextCards, Action<BaseState> stateSetter)
             : base(context, contextCards, stateSetter) { }
 
         public override void Start()
         {
-            Init();
-            Observable
+            InitTimer();
+            LaunchTimer();
+        }
+
+        private void LaunchTimer()
+        {
+            _timerObject = Observable
                 .Timer(TimerInterval)
                 .Repeat()
-                .Subscribe(_ => UpdateTimer())
-                .AddTo(_disposables);
+                .Subscribe(_ => UpdateTimer());
         }
 
         public override TimeSpan GetTimer() => TimerLeft;
 
-        private void Init()
+        private void InitTimer()
         {
-            _disposables = new CompositeDisposable();
-            SetTotalTime();
-        }
-
-        private void SetTotalTime()
-        {
-            TimerLeft = new TimeSpan();
-            
             foreach (var card in Cards)
                 TimerLeft += card.MergeTime;
         }
 
         private void UpdateTimer()
         {
+            Debug.Log($"Timer updated. {TimerLeft}");
             TimerLeft -= TimerInterval;
             ChangeStateIfDone();
             Refresh();
@@ -58,6 +56,6 @@ namespace Model.Merging.TablesStates
             Dispose();
         }
 
-        public void Dispose() => _disposables?.Clear();
+        public void Dispose() => _timerObject.Dispose();
     }
 }
