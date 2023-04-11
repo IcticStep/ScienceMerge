@@ -8,7 +8,7 @@ namespace Configurations
     [Serializable]
     public class MergeRule
     {
-        [field: SerializeField] 
+        [SerializeField] 
         private List<int> _cardsID;
         
         [field: SerializeField]

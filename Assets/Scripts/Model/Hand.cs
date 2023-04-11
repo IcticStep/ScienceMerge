@@ -19,13 +19,8 @@ namespace Model
 
         private readonly Inventory _inventory;
         private readonly MergeTablesContainer _mergeTablesContainer;
-        private Card _card;
 
-        public Card Card
-        {
-            get => _card;
-            set => _card = value;
-        }
+        public Card Card { get; set; }
 
         public bool HasCard => Card is not null;
 

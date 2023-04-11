@@ -44,7 +44,7 @@ namespace View.Merging
             _button.onClick.AddListener(HandleTouch);
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             if (MergeTable is not null)
                 MergeTable.OnDataChanged -= UpdateView;

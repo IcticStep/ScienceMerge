@@ -8,6 +8,7 @@ namespace Infrastructure.Global
 {
     public class ServicesInstaller : MonoInstaller
     {
+        // ReSharper disable Unity.PerformanceAnalysis
         public override void InstallBindings()
         {
             BindService<CardCreator>();

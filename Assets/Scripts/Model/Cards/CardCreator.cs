@@ -20,7 +20,7 @@ namespace Model.Cards
         public Card InstantiateCard(int id)
         {
             var info = _configuration[id];
-            return new Card(info.Id, info.Name, new TimeSpan(0, 0, info.MergeSeconds), info.Price);
+            return new Card(info.Id, info.Name, TimeSpan.FromSeconds(info.MergeSeconds), info.Price);
         }
 
         public Card InstantiateCardByMerge(List<Card> cards)
