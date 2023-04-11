@@ -20,6 +20,7 @@ namespace Model.Merging.TablesStates
 
         protected CardCreator CardCreator => Context.CardCreator;
         
+        public virtual void Start() { }
         public virtual void AddCard(Card card) { }
         public virtual void HandleTouch() { }
         public virtual TimeSpan GetTimer() => TimeSpan.MinValue;

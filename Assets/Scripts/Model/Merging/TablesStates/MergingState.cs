@@ -11,14 +11,16 @@ namespace Model.Merging.TablesStates
     {
         public readonly TimeSpan TimerInterval = TimeSpan.FromSeconds(1);
         private CompositeDisposable _disposables;
-        public TimeSpan TimerLeft { get; private set; }
+        public TimeSpan TimerLeft { get; private set; } = new();
 
         public MergingState(MergeTable context, List<Card> contextCards, Action<BaseState> stateSetter)
-            : base(context, contextCards, stateSetter)
+            : base(context, contextCards, stateSetter) { }
+
+        public override void Start()
         {
             Init();
-            
-            Observable.Timer(TimerInterval)
+            Observable
+                .Timer(TimerInterval)
                 .Repeat()
                 .Subscribe(_ => UpdateTimer())
                 .AddTo(_disposables);

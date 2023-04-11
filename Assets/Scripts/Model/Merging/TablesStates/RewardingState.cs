@@ -9,16 +9,14 @@ namespace Model.Merging.TablesStates
     public class RewardingState : BaseState
     {
         public RewardingState(MergeTable context, List<Card> contextCards, Action<BaseState> stateSetter)
-            : base(context, contextCards, stateSetter)
+            : base(context, contextCards, stateSetter) { }
+
+        public override void Start()
         {
-            Observable.TimerFrame(1)
-                .Subscribe(_ =>
-                {
-                    SetResult();
-                    Refresh();
-                });
+            SetResult();
+            Refresh();
         }
-        
+
         public override void HandleTouch()
         {
             Context.RewardWithCard(Cards.First());

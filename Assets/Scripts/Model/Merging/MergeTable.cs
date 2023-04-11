@@ -42,6 +42,10 @@ namespace Model.Merging
 
         public void RewardWithCard(Card card) => OnCardRewarded?.Invoke(card);
 
-        private void SetState(BaseState newState) => _state = newState;
+        private void SetState(BaseState newState)
+        {
+            _state = newState;
+            _state.Start();
+        }
     }
 }
