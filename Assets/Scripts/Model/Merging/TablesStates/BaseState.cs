@@ -26,10 +26,6 @@ namespace Model.Merging.TablesStates
         public virtual TimeSpan GetTimer() => TimeSpan.MinValue;
 
         protected void Refresh() => Context.Refresh();
-        protected void SetState(BaseState state)
-        {
-            Debug.Log($"State changed from {Context.StateName} to {state}");
-            StateSetter.Invoke(state);
-        }
+        protected void SetState(BaseState state) => StateSetter.Invoke(state);
     }
 }

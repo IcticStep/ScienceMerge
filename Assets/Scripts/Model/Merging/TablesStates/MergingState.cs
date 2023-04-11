@@ -41,7 +41,6 @@ namespace Model.Merging.TablesStates
 
         private void UpdateTimer()
         {
-            Debug.Log($"Timer updated. {TimerLeft}");
             TimerLeft -= TimerInterval;
             ChangeStateIfDone();
             Refresh();
@@ -49,7 +48,7 @@ namespace Model.Merging.TablesStates
 
         private void ChangeStateIfDone()
         {
-            if (TimerLeft > TimeSpan.Zero)
+            if (TimerLeft >= TimeSpan.Zero)
                 return;
             
             SetState(new RewardingState(Context, Cards, StateSetter));
