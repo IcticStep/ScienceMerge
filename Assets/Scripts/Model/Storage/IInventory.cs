@@ -1,6 +1,7 @@
 ﻿using System;
+using Model.Cards;
 
-namespace Model
+namespace Model.Storage
 {
     public interface IInventory
     {

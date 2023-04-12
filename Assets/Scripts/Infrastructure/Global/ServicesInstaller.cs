@@ -1,14 +1,20 @@
 ﻿using Model;
+using Model.Cards;
+using Model.Merging;
+using Model.Storage;
 using Zenject;
 
-namespace Infrastructure
+namespace Infrastructure.Global
 {
     public class ServicesInstaller : MonoInstaller
     {
+        // ReSharper disable Unity.PerformanceAnalysis
         public override void InstallBindings()
         {
             BindService<CardCreator>();
             BindService<Inventory>();
+            BindService<MergeTablesContainer>();
+            BindService<Hand>();
         }
         
         private void BindService<T>() =>

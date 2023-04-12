@@ -1,22 +1,20 @@
-using System;
 using Configurations;
 using UnityEngine;
-using View;
 using Zenject;
 
-namespace Infrastructure
+namespace Infrastructure.Global
 {
     public class ConfigurationsInstaller : MonoInstaller
     {
-        [SerializeField] 
-        private CardsConfiguration _cardsConfiguration;
-        [SerializeField] 
-        private InventoryConfiguration _inventoryConfiguration;
+        [SerializeField] private CardsConfiguration _cardsConfiguration;
+        [SerializeField] private InventoryConfiguration _inventoryConfiguration;
+        [SerializeField] private MergeConfiguration _mergeConfiguration;
         
         public override void InstallBindings()
         {
             BindConfiguration(_cardsConfiguration);
             BindConfiguration(_inventoryConfiguration);
+            BindConfiguration(_mergeConfiguration);
         }
 
         private void BindConfiguration<T>(T instance) =>
