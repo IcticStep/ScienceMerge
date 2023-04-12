@@ -18,11 +18,11 @@ namespace Model.Storage
         private int _count;
         private readonly bool _forceInfinity;
 
-        public event Action OnEmpty;
+        public event Action<InventoryCell> OnEmpty;
         public event Action OnCountChanged;
         public Card Card { get; private set; }
         public int Count => _forceInfinity ? int.MaxValue : _count;
-        public bool HasCards => Count >= 0;
+        public bool HasCards => Count > 0;
 
         public bool TryInsertCard(in Card card)
         {
@@ -66,7 +66,7 @@ namespace Model.Storage
             OnCountChanged?.Invoke();
             
             if(!HasCards)
-                OnEmpty?.Invoke();
+                OnEmpty?.Invoke(this);
         }
     }
 }

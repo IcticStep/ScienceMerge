@@ -59,7 +59,7 @@ namespace View.Storage
         {
             while (inventoryCells.Count < _views.Count)
             {
-                Destroy(_views[^1]);
+                Destroy(_views[^1].gameObject);
                 _views.RemoveAt(_views.Count - 1);
             }
         }

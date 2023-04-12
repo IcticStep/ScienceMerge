@@ -79,7 +79,7 @@ namespace View.Merging
         {
             while (tables.Count < _mergeTableViews.Count)
             {
-                Destroy(_mergeTableViews[^1]);
+                Destroy(_mergeTableViews[^1].gameObject);
                 _mergeTableViews.RemoveAt(_mergeTableViews.Count - 1);
             }
         }

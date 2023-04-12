@@ -18,14 +18,14 @@ namespace Model.Storage
         }
 
         public event Action OnStateChanged;
-        
+
         private readonly List<InventoryCell> _cells = new();
         private readonly InventoryConfiguration _inventoryConfiguration;
         private readonly CardCreator _cardCreator;
-        
+
         public IReadOnlyList<InventoryCell> Cells => _cells;
 
-        public bool HasCard(int cardId) => 
+        public bool HasCard(int cardId) =>
             Cells.Any(cell => cell.Card.Id == cardId);
 
         public bool HasCard(Card card) => HasCard(card.Id);
@@ -33,7 +33,7 @@ namespace Model.Storage
         public bool TryTakeCard(int id, out Card card)
         {
             card = FindCellWithCard(id)?.Card;
-            
+
             return card is not null;
         }
 
@@ -47,14 +47,14 @@ namespace Model.Storage
         public void InsertCard(Card card)
         {
             var cell = FindCellWithCard(card.Id);
-            if(cell is not null)
+            if (cell is not null)
             {
                 cell.TryInsertCard(card);
                 OnStateChanged?.Invoke();
                 return;
             }
-            
-            _cells.Add(new(card));
+
+            AddCell(new(card));
             OnStateChanged?.Invoke();
         }
 
@@ -67,8 +67,22 @@ namespace Model.Storage
             foreach (var cardRule in cardsRules)
             {
                 var card = _cardCreator.InstantiateCard(cardRule.CardId);
-                _cells.Add(new InventoryCell(card, cardRule.Count, cardRule.ForceInfinity));
+                AddCell(new InventoryCell(card, cardRule.Count, cardRule.ForceInfinity));
             }
+
+            OnStateChanged?.Invoke();
+        }
+
+        private void AddCell(InventoryCell cell)
+        {
+            _cells.Add(cell);
+            cell.OnEmpty += RemoveCell;
+        }
+
+        private void RemoveCell(InventoryCell cell)
+        {
+            cell.OnEmpty -= RemoveCell;
+            _cells.Remove(cell);
             OnStateChanged?.Invoke();
         }
     }
