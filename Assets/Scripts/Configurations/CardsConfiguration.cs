@@ -13,6 +13,6 @@ namespace Configurations
         public IReadOnlyList<CardSettings> CardSettingsList => _cardSetting;
 
         public CardSettings this[int id] => 
-            CardSettingsList.First(card => card.Id == id);
+            CardSettingsList.FirstOrDefault(card => card.Id == id);
     }
 }

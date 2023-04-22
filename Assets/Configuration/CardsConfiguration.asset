@@ -15,7 +15,7 @@ MonoBehaviour:
   _cardSetting:
   - _id: 0
     _name: Wood
-    _mergeSeconds: 1
+    _mergeSeconds: 2
     _price: 0
     _sprite: {fileID: 21300000, guid: 9da71408408cdf843b0ae5b168ea69c5, type: 3}
   - _id: 1
