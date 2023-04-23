@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace Editor.Common
     {
         private const float EditorLineHeightMultiplayer = 1.35f;
         public static readonly float EditorLineHeight = EditorStyles.label.lineHeight * EditorLineHeightMultiplayer;
-        
+
         public static void DrawScrollable(Action drawCall, ref Vector2 position, int showLines = 10)
         {
             var height = EditorLineHeight * showLines;
@@ -16,12 +17,30 @@ namespace Editor.Common
             drawCall.Invoke();
             EditorGUILayout.EndScrollView();
         }
-        
+
         public static void DrawHorizontally(Action drawCall)
         {
             EditorGUILayout.BeginHorizontal();
             drawCall.Invoke();
             EditorGUILayout.EndHorizontal();
+        }
+        
+        public static void DrawListElements(SerializedProperty list)
+        {
+            for (var i = 0; i < list.arraySize; i++)
+            {
+                var element = list.GetArrayElementAtIndex(i);
+                EditorGUILayout.PropertyField(element); 
+            }
+        }
+        
+        public static void DrawListElements(SerializedProperty list, IEnumerable<int> elementIndexes)
+        {
+            foreach (var index in elementIndexes)
+            {
+                var element = list.GetArrayElementAtIndex(index);
+                EditorGUILayout.PropertyField(element);        
+            }
         }
     }
 }
