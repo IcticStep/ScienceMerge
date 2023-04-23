@@ -38,13 +38,3 @@ MonoBehaviour:
     _mergeSeconds: 1
     _price: 0
     _sprite: {fileID: 21300000, guid: 4bd2bc7e1a240264db15c52548cf4826, type: 3}
-  - _id: 5
-    _name: TestCard
-    _mergeSeconds: 1
-    _price: 0
-    _sprite: {fileID: 21300000, guid: 4bd2bc7e1a240264db15c52548cf4826, type: 3}
-  - _id: 6
-    _name: AnotherTestCard
-    _mergeSeconds: 1
-    _price: 0
-    _sprite: {fileID: 21300000, guid: 4bd2bc7e1a240264db15c52548cf4826, type: 3}

@@ -33,18 +33,13 @@ namespace Editor.ConfigurationTools
             serializedObject.Update();
 
             DrawHeaderLabel();
-            EditorGUI.BeginChangeCheck();
             DrawList();
             DrawManageButtons();
             
             serializedObject.ApplyModifiedProperties();
-
-            if (EditorGUI.EndChangeCheck())
-            {
-                EditorUtility.SetDirty(_target);
-                AssetDatabase.SaveAssetIfDirty(_target);
-            }
         }
+
+        private void OnValidate() => ForceSave();
 
         private void Init()
         {
@@ -88,6 +83,7 @@ namespace Editor.ConfigurationTools
             var idProperty = addedElement.FindPropertyRelative(ElementIdRelativePropertyPath);
             idProperty.intValue = LastElementListIndex;
             
+            ForceSave();
             ScrollListToBottom();
         }
 
@@ -98,7 +94,15 @@ namespace Editor.ConfigurationTools
             if(_listProperty.arraySize == oldSize)
                 _listProperty.DeleteArrayElementAtIndex(LastElementListIndex);
             
+            ForceSave();
             ScrollListToBottom();
+        }
+
+        private void ForceSave()
+        {
+            serializedObject.ApplyModifiedProperties();
+            EditorUtility.SetDirty(_target);
+            AssetDatabase.SaveAssetIfDirty(_target);
         }
 
         private void ScrollListToBottom() =>
