@@ -11,16 +11,18 @@ namespace Editor.ConfigurationTools
     public class CardsConfigurationEditor : UnityEditor.Editor
     {
         private const string EditorHeader = "Cards configuration";
-        private const string ListPropertyPath = "_cardSetting";
-        private const string ElementIdRelativePropertyPath = "_id";
+        private const string ListPropertyPath = "_cardSettings";
         private const float SmallButtonWidth = 40f;
+        private const float MediumButtonWidth = 60f;
         private const float DownButtonsTopMargin = -5f;
         private const int VisibleListLines = 31;
 
         private const string AddButtonLabel = "+";
         private const string RemoveButtonLabel = "-";
         private const string ClearSearchButtonLabel = "X";
+        private const string UpdateOrderButtonLabel = "Reorder";
         private readonly GUILayoutOption _smallButtonStyle = GUILayout.Width(SmallButtonWidth);
+        private readonly GUILayoutOption _mediumButtonStyle = GUILayout.Width(MediumButtonWidth);
 
         private CardsConfiguration _target;
         private SerializedProperty _listProperty;
@@ -37,7 +39,7 @@ namespace Editor.ConfigurationTools
 
             serializedObject.Update();
 
-            DrawHeaderLabel();
+            DrawHeaderPanel();
             DrawSearchBar();
             DrawList();
             DrawManageButtons();
@@ -53,7 +55,16 @@ namespace Editor.ConfigurationTools
             _listProperty = serializedObject.FindProperty(ListPropertyPath);
         }
 
-        private static void DrawHeaderLabel() => GUILayout.Label(EditorHeader);
+        private void DrawHeaderPanel()
+        {
+            EditorGUILayoutComposer.DrawHorizontally(() =>
+            {
+                GUILayout.Label(EditorHeader);
+                GUILayout.FlexibleSpace();
+                if(GUILayout.Button(UpdateOrderButtonLabel, EditorStyles.miniButton, _mediumButtonStyle))
+                    _target.ReorderByID();
+            });
+        }
 
         private void DrawSearchBar()
         {
@@ -78,12 +89,40 @@ namespace Editor.ConfigurationTools
             EditorGUILayoutComposer.DrawScrollable(() =>
                 {
                     if (string.IsNullOrEmpty(_searchPrompt) || _searchResult is null)
-                        EditorGUILayoutComposer.DrawListElements(_listProperty);
+                        DrawListElements(_listProperty);
                     else
-                        EditorGUILayoutComposer.DrawListElements(_listProperty, _searchResult);
+                        DrawListElements(_listProperty, _searchResult);
                 },
                 ref _currentScroll,
                 VisibleListLines);
+        }
+        
+        private void DrawListElements(SerializedProperty list)
+        {
+            for (var i = 0; i < list.arraySize; i++)
+            {
+                var element = list.GetArrayElementAtIndex(i);
+                DrawListElement(element, i);
+            }
+        }
+        
+        private void DrawListElements(SerializedProperty list, IEnumerable<int> elementIndexes)
+        {
+            foreach (var index in elementIndexes)
+            {
+                var element = list.GetArrayElementAtIndex(index);
+                DrawListElement(element, index);
+            }
+        }
+
+        private void DrawListElement(SerializedProperty element, int index)
+        {
+            EditorGUILayoutComposer.DrawHorizontally(() =>
+            {
+                EditorGUILayout.PropertyField(element);
+                if(GUILayout.Button(RemoveButtonLabel, EditorStyles.miniButton, _smallButtonStyle)) 
+                    RemoveElement(index);
+            });
         }
 
         private void DrawManageButtons()
@@ -106,21 +145,20 @@ namespace Editor.ConfigurationTools
 
         private void AddElement()
         {
-            _listProperty.InsertArrayElementAtIndex(_listProperty.arraySize);
-            var addedElement = _listProperty.GetArrayElementAtIndex(LastElementListIndex);
-            var idProperty = addedElement.FindPropertyRelative(ElementIdRelativePropertyPath);
-            idProperty.intValue = LastElementListIndex;
-            
+            _target.AddEmptyCard();
+            Repaint();
             ForceSave();
             ScrollListToBottom();
         }
 
-        private void RemoveLastElement()
+        private void RemoveLastElement() => RemoveElement(LastElementListIndex);
+
+        private void RemoveElement(int index)
         {
             var oldSize = _listProperty.arraySize;
-            _listProperty.DeleteArrayElementAtIndex(LastElementListIndex);
+            _listProperty.DeleteArrayElementAtIndex(index);
             if(_listProperty.arraySize == oldSize)
-                _listProperty.DeleteArrayElementAtIndex(LastElementListIndex);
+                _listProperty.DeleteArrayElementAtIndex(index);
             
             ForceSave();
             ScrollListToBottom();

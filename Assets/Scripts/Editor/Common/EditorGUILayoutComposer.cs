@@ -24,23 +24,5 @@ namespace Editor.Common
             drawCall.Invoke();
             EditorGUILayout.EndHorizontal();
         }
-        
-        public static void DrawListElements(SerializedProperty list)
-        {
-            for (var i = 0; i < list.arraySize; i++)
-            {
-                var element = list.GetArrayElementAtIndex(i);
-                EditorGUILayout.PropertyField(element); 
-            }
-        }
-        
-        public static void DrawListElements(SerializedProperty list, IEnumerable<int> elementIndexes)
-        {
-            foreach (var index in elementIndexes)
-            {
-                var element = list.GetArrayElementAtIndex(index);
-                EditorGUILayout.PropertyField(element);        
-            }
-        }
     }
 }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa1b2e00196c664581ca05d4f8316e9, type: 3}
   m_Name: CardsConfiguration
   m_EditorClassIdentifier: 
-  _cardSetting:
+  _cardSettings:
   - _id: 0
     _name: Wood
     _mergeSeconds: 1
