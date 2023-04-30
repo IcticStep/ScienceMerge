@@ -6,6 +6,9 @@ namespace Configurations
     [Serializable]
     public class CardSettings
     {
+        public CardSettings() { }
+        public CardSettings(int id) => _id = id;
+        
         [SerializeField] private int _id;
         [SerializeField] private string _name;
         [SerializeField] private int _mergeSeconds;
