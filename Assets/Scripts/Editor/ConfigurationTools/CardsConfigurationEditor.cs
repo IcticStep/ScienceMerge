@@ -4,6 +4,7 @@ using Configurations;
 using Editor.Common;
 using UnityEditor;
 using UnityEngine;
+using static Editor.Common.EditorGUIStyles;
 
 namespace Editor.ConfigurationTools
 {
@@ -12,47 +13,43 @@ namespace Editor.ConfigurationTools
     {
         private const string EditorHeader = "Cards configuration";
         private const string ListPropertyPath = "_cardSettings";
-        private const float SmallButtonWidth = 40f;
-        private const float MediumButtonWidth = 60f;
-        private const float DownButtonsTopMargin = -5f;
-        private const int VisibleListLines = 31;
 
-        private const string AddButtonLabel = "+";
-        private const string RemoveButtonLabel = "-";
-        private const string ClearSearchButtonLabel = "X";
-        private const string UpdateOrderButtonLabel = "Reorder";
-        private readonly GUILayoutOption _smallButtonStyle = GUILayout.Width(SmallButtonWidth);
-        private readonly GUILayoutOption _mediumButtonStyle = GUILayout.Width(MediumButtonWidth);
-
+        private ListDrawer _listDrawer;
         private CardsConfiguration _target;
         private SerializedProperty _listProperty;
-        private Vector2 _currentScroll;
         private string _searchPrompt = "";
         private List<int> _searchResult;
 
-        private int LastElementListIndex => _listProperty.arraySize - 1;
-
         public override void OnInspectorGUI()
         {
-            Init();
+            InitTargets();
             if(_target is null) return;
 
             serializedObject.Update();
 
             DrawHeaderPanel();
             DrawSearchBar();
+            InitListDrawer();
             DrawList();
-            DrawManageButtons();
             
             serializedObject.ApplyModifiedProperties();
         }
 
         private void OnValidate() => ForceSave();
 
-        private void Init()
+        private void InitTargets()
         {
             _target = target as CardsConfiguration;
             _listProperty = serializedObject.FindProperty(ListPropertyPath);
+        }
+
+        private void InitListDrawer()
+        {
+            if(_listDrawer is not null)
+                return;
+            
+            _listDrawer = new(_listProperty, addingItem: AddElement);
+            _listDrawer.OnStateChange += AddElement;
         }
 
         private void DrawHeaderPanel()
@@ -61,7 +58,7 @@ namespace Editor.ConfigurationTools
             {
                 GUILayout.Label(EditorHeader);
                 GUILayout.FlexibleSpace();
-                if(GUILayout.Button(UpdateOrderButtonLabel, EditorStyles.miniButton, _mediumButtonStyle))
+                if(GUILayout.Button(UpdateOrderButtonLabel, EditorStyles.miniButton, MediumButtonStyle))
                     _target.ReorderByID();
             });
         }
@@ -79,68 +76,15 @@ namespace Editor.ConfigurationTools
                 if(EditorGUI.EndChangeCheck())
                     Search();
                 
-                if(GUILayout.Button(ClearSearchButtonLabel, EditorStyles.toolbarButton, _smallButtonStyle))
+                if(GUILayout.Button(ClearSearchButtonLabel, EditorStyles.toolbarButton, SmallButtonStyle))
                     ClearSearch();
             });
         }
 
         private void DrawList()
         {
-            EditorGUILayoutComposer.DrawScrollable(() =>
-                {
-                    if (string.IsNullOrEmpty(_searchPrompt) || _searchResult is null)
-                        DrawListElements(_listProperty);
-                    else
-                        DrawListElements(_listProperty, _searchResult);
-                },
-                ref _currentScroll,
-                VisibleListLines);
-        }
-        
-        private void DrawListElements(SerializedProperty list)
-        {
-            for (var i = 0; i < list.arraySize; i++)
-            {
-                var element = list.GetArrayElementAtIndex(i);
-                DrawListElement(element, i);
-            }
-        }
-        
-        private void DrawListElements(SerializedProperty list, IEnumerable<int> elementIndexes)
-        {
-            foreach (var index in elementIndexes)
-            {
-                var element = list.GetArrayElementAtIndex(index);
-                DrawListElement(element, index);
-            }
-        }
-
-        private void DrawListElement(SerializedProperty element, int index)
-        {
-            EditorGUILayoutComposer.DrawHorizontally(() =>
-            {
-                EditorGUILayout.PropertyField(element);
-                if(GUILayout.Button(RemoveButtonLabel, EditorStyles.miniButton, _smallButtonStyle)) 
-                    RemoveElement(index);
-            });
-        }
-
-        private void DrawManageButtons()
-        {
-            if(!string.IsNullOrEmpty(_searchPrompt))
-                return;
-            
-            GUILayout.Space(DownButtonsTopMargin);
-            const int buttonCount = 2;
-            
-            EditorGUILayoutComposer.DrawHorizontally(() =>
-            {
-                GUILayout.Space(EditorGUIUtility.currentViewWidth - (buttonCount + 1) * SmallButtonWidth);
-                if(GUILayout.Button(AddButtonLabel, EditorStyles.miniButtonLeft, _smallButtonStyle)) 
-                    AddElement();
-                if(GUILayout.Button(RemoveButtonLabel, EditorStyles.miniButtonRight, _smallButtonStyle)) 
-                    RemoveLastElement();
-            });
+            var filter = GetListFilter();
+            _listDrawer.DrawScrollable(filter);
         }
 
         private void AddElement()
@@ -148,20 +92,6 @@ namespace Editor.ConfigurationTools
             _target.AddEmptyCard();
             Repaint();
             ForceSave();
-            ScrollListToBottom();
-        }
-
-        private void RemoveLastElement() => RemoveElement(LastElementListIndex);
-
-        private void RemoveElement(int index)
-        {
-            var oldSize = _listProperty.arraySize;
-            _listProperty.DeleteArrayElementAtIndex(index);
-            if(_listProperty.arraySize == oldSize)
-                _listProperty.DeleteArrayElementAtIndex(index);
-            
-            ForceSave();
-            ScrollListToBottom();
         }
 
         private void Search()
@@ -179,16 +109,18 @@ namespace Editor.ConfigurationTools
             _searchResult = default;
         }
 
+        private IEnumerable<int> GetListFilter()
+        {
+            if (string.IsNullOrEmpty(_searchPrompt) || _searchResult is null)
+                return null;
+            return _searchResult;
+        }
+
         private void ForceSave()
         {
             serializedObject.ApplyModifiedProperties();
             EditorUtility.SetDirty(_target);
             AssetDatabase.SaveAssetIfDirty(_target);
         }
-
-        private void ScrollListToBottom() =>
-            _currentScroll = new(
-                _currentScroll.x,
-                EditorGUILayoutComposer.EditorLineHeight * VisibleListLines);
     }
 }

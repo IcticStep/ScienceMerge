@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,10 +6,12 @@ namespace Editor.Common
 {
     public static class EditorGUILayoutComposer
     {
+        private const int DefaultLinesVisible = 30;
         private const float EditorLineHeightMultiplayer = 1.35f;
+
         public static readonly float EditorLineHeight = EditorStyles.label.lineHeight * EditorLineHeightMultiplayer;
 
-        public static void DrawScrollable(Action drawCall, ref Vector2 position, int showLines = 10)
+        public static void DrawScrollable(Action drawCall, ref Vector2 position, int showLines = DefaultLinesVisible)
         {
             var height = EditorLineHeight * showLines;
             position = EditorGUILayout.BeginScrollView(position, EditorStyles.helpBox, GUILayout.Height(height));
