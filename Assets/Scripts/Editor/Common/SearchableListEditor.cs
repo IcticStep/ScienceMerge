@@ -16,16 +16,15 @@ namespace Editor.Common
         private SerializedProperty _listProperty;
         private ListDrawer _listDrawer;
         private List<int> _searchResult;
+        [CanBeNull] private Action _sorting;
         private string _editorHeader;
         private string _listPropertyPath;
         private string _searchPrompt = "";
-        [CanBeNull] private Action _sorting = null;
-        
-        public bool Initialized { get; private set; }
+        private bool _initialized;
 
         public override void OnInspectorGUI()
         {
-            if (!Initialized)
+            if (!_initialized)
                 return;
             
             InitTargets();
@@ -53,7 +52,7 @@ namespace Editor.Common
             _listPropertyPath = listPropertyPath;
             _sorting = itemsSorting;
             
-            Initialized = true;
+            _initialized = true;
         }
         
         private void InitTargets()
