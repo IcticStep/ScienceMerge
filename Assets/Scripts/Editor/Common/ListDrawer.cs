@@ -20,7 +20,7 @@ namespace Editor.Common
         private Vector2 _currentScroll;
         private IEnumerable<int> _idsToDraw;
 
-        private bool Filtered => _idsToDraw is null || _idsToDraw.IsEmpty();
+        private bool Filtered => _idsToDraw is not null && !_idsToDraw.IsEmpty();
         private int ListSize => _listProperty.arraySize;
 
         private static bool AddButton => 
@@ -58,7 +58,7 @@ namespace Editor.Common
 
         private void DrawList()
         {
-            if (Filtered)
+            if (!Filtered)
                 DrawAllElements();
             else
                 DrawFilteredElements();
@@ -94,6 +94,9 @@ namespace Editor.Common
 
         private void DrawManageButtons()
         {
+            if(Filtered)
+                return;
+            
             GUILayout.Space(DownButtonsTopMargin);
             const int buttonCount = 2;
             

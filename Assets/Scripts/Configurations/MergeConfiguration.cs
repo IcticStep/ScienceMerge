@@ -21,5 +21,8 @@ namespace Configurations
 
             return rule?.ResultID ?? -1;
         }
+
+        public void AddEmptyCard() => 
+            _mergeRules.Add(new MergeRule());
     }
 }
