@@ -4,7 +4,7 @@ using Configurations;
 using Editor.Common;
 using UnityEditor;
 
-namespace Editor.ConfigurationTools
+namespace Editor.ConfigurationTools.Inspectors
 {
     [CustomEditor(typeof(CardsConfiguration))]
     public class CardsConfigurationEditor : SearchableListEditor<CardsConfiguration>

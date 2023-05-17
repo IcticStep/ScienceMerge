@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Model.Cards;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Configurations
 {
     [Serializable]
     public class MergeRule
     {
-        [SerializeField] 
-        private List<int> _cardsID;
+        [SerializeField] private List<Card> _cards;
         
         [field: SerializeField]
         public int ResultID { get; private set; }
 
-        public IReadOnlyList<int> CardsID => _cardsID;
+        public IReadOnlyList<int> CardsID => _cards.Select(card => card.Id).ToList();
 
         public override bool Equals(object obj)
         {
@@ -27,6 +28,6 @@ namespace Configurations
             return CardsID.All(card => other.CardsID.Contains(card));
         }
 
-        public override int GetHashCode() => HashCode.Combine(_cardsID, ResultID);
+        public override int GetHashCode() => HashCode.Combine(_cards, ResultID);
     }
 }

@@ -3,9 +3,8 @@ using System.Linq;
 using Configurations;
 using Editor.Common;
 using UnityEditor;
-using UnityEngine;
 
-namespace Editor.ConfigurationTools
+namespace Editor.ConfigurationTools.Inspectors
 {
     [CustomEditor(typeof(MergeConfiguration))]
     public class MergeConfigurationEditor : SearchableListEditor<MergeConfiguration>
