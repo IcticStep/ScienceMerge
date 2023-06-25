@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Configurations;
 using Editor.Common;
@@ -16,8 +15,8 @@ namespace Editor.ConfigurationTools.EditorWindows
         private const string ResourceName = "CardsConfiguration";
         private const string ListPropertyName = "_cardSettings";
         private const string AutoSaveSettingName = "CardsConfiguration_AutoSave";
-        private const int MinEditorHeight = 118;
         private const int MinEditorLines = 2;
+        private readonly Vector2 _minEditorSize = new(650, 118);
 
         private CardsConfiguration _target;
         private SerializedObject _serializedObject;
@@ -61,12 +60,16 @@ namespace Editor.ConfigurationTools.EditorWindows
 
         private void Initialize()
         {
+            SetMinEditorSize();
             Load();
             CreateAssetIfNotExist();
             CreateSerializedObjectIfNone();
             UpdateSerialized();
             InitListDrawer();
         }
+
+        private void SetMinEditorSize() => 
+            minSize = _minEditorSize;
 
         private void CreateAssetIfNotExist()
         {
@@ -176,7 +179,7 @@ namespace Editor.ConfigurationTools.EditorWindows
             var lineHeight = EditorGUILayoutComposer.EditorLineHeight;
             
             _listDrawer.VisibleLines = 
-                (int)((windowHeight - MinEditorHeight) / lineHeight + MinEditorLines);
+                (int)((windowHeight - _minEditorSize.y) / lineHeight + MinEditorLines);
         }
 
         private void AddElement()

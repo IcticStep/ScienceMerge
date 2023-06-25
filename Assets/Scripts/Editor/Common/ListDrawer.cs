@@ -52,16 +52,16 @@ namespace Editor.Common
         {
             _idsToDraw = idsToDraw;
 
-            DrawManageButtons();
             DrawList();
+            DrawManageButtons();
         }
 
         public void DrawScrollable(IEnumerable<int> idsToDraw = null)
         {
             _idsToDraw = idsToDraw;
 
-            DrawManageButtons();
             DrawScrollableList();
+            DrawManageButtons();
         }
 
         private void DrawScrollableList() => 
@@ -108,7 +108,7 @@ namespace Editor.Common
             if(Filtered)
                 return;
             
-            //GUILayout.Space(DownButtonsTopMargin);
+            GUILayout.Space(DownButtonsTopMargin);
             const int buttonCount = 2;
             
             EditorGUILayoutComposer.DrawHorizontally(() =>
