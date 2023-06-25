@@ -31,10 +31,9 @@ namespace Editor.ConfigurationTools.EditorWindows
 
         private void OnGUI()
         {
-            SetTitle();
             UpdateSerialized();
 
-            InitListDrawer();
+            SetTitle();
             DrawSearchBar();
             DrawList();
             
@@ -49,10 +48,11 @@ namespace Editor.ConfigurationTools.EditorWindows
 
         private void Initialize()
         {
-            LoadAsset();
+            Load();
             CreateAssetIfNotExist();
             CreateSerializedObjectIfNone();
             UpdateSerialized();
+            InitListDrawer();
         }
 
         private void CreateAssetIfNotExist()
@@ -61,7 +61,7 @@ namespace Editor.ConfigurationTools.EditorWindows
                 return;
             
             _target = CreateInstance<CardsConfiguration>();
-            AssetDatabase.CreateAsset(_target , $"Assets/Configuration/Resources/{ResourceName}.asset");
+            AssetDatabase.CreateAsset(_target, $"Assets/Configuration/Resources/{ResourceName}.asset");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
@@ -85,7 +85,7 @@ namespace Editor.ConfigurationTools.EditorWindows
 
         private void InitListDrawer()
         {
-            _listDrawer = new(_listProperty, addingItem: AddElement);
+            _listDrawer = new(_listProperty, addingItem: AddElement, visibleLines:10);
             _listDrawer.OnStateChange += AddElement;
         }
 
@@ -100,7 +100,7 @@ namespace Editor.ConfigurationTools.EditorWindows
         {
             var settingsList = _target.CardSettingsList;
             return settingsList
-                .Where((x) => x.Name.ToLowerInvariant().Contains(_searchPrompt))
+                .Where(x => x.Name.ToLowerInvariant().Contains(_searchPrompt))
                 .Select(x => x.Id)
                 .ToList();
         }
@@ -130,8 +130,11 @@ namespace Editor.ConfigurationTools.EditorWindows
 
         private void DrawList()
         {
+            if(_listDrawer is null)
+                InitListDrawer();
+            
             var filter = GetListFilter();
-            _listDrawer.DrawScrollable(filter);
+            _listDrawer!.DrawScrollable(filter);
         }
 
         private void AddElement()
@@ -164,7 +167,7 @@ namespace Editor.ConfigurationTools.EditorWindows
         private void CreateSerializedObjectIfNone() => 
             _serializedObject ??= new SerializedObject(_target);
 
-        private void LoadAsset() => 
+        private void Load() => 
             _target = Resources.Load<CardsConfiguration>(ResourceName);
 
         private void Save()

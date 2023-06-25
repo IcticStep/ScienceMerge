@@ -13,7 +13,7 @@ namespace Editor.Common
         private const int DefaultLinesVisible = 30;
         private readonly Action _addingItem;
         private readonly SerializedProperty _listProperty;
-        private readonly int _visibleLines;
+        private int _visibleLines;
 
         public event Action OnStateChange;
         
@@ -26,35 +26,46 @@ namespace Editor.Common
         private static bool AddButton => 
             GUILayout.Button(AddButtonLabel, EditorStyles.miniButtonLeft, SmallButtonStyle);
         private static bool DeleteLastButton =>
-            GUILayout.Button(RemoveButtonLabel, EditorStyles.miniButton, SmallButtonStyle);
+            GUILayout.Button(RemoveButtonLabel, EditorStyles.miniButtonRight, SmallButtonStyle);
         private static bool DeleteElementButton =>
             GUILayout.Button(RemoveButtonLabel, EditorStyles.miniButton, SmallButtonStyle);
+
+        public int VisibleLines
+        {
+            get => _visibleLines;
+            set
+            {
+                if(_visibleLines < 0)
+                    throw new ArgumentException(nameof(_visibleLines));
+                _visibleLines = value;
+            }
+        }
 
         public ListDrawer(SerializedProperty listProperty, int visibleLines = DefaultLinesVisible, Action addingItem = null)
         {
             _listProperty = listProperty;
             _addingItem = addingItem;
-            _visibleLines = visibleLines;
+            VisibleLines = visibleLines;
         }
 
         public void Draw(IEnumerable<int> idsToDraw = null)
         {
             _idsToDraw = idsToDraw;
-            
-            DrawList();
+
             DrawManageButtons();
+            DrawList();
         }
 
         public void DrawScrollable(IEnumerable<int> idsToDraw = null)
         {
             _idsToDraw = idsToDraw;
-            
-            DrawScrollableList();
+
             DrawManageButtons();
+            DrawScrollableList();
         }
 
         private void DrawScrollableList() => 
-            EditorGUILayoutComposer.DrawScrollable(DrawList, ref _currentScroll, _visibleLines);
+            EditorGUILayoutComposer.DrawScrollable(DrawList, ref _currentScroll, VisibleLines);
 
         private void DrawList()
         {
@@ -97,7 +108,7 @@ namespace Editor.Common
             if(Filtered)
                 return;
             
-            GUILayout.Space(DownButtonsTopMargin);
+            //GUILayout.Space(DownButtonsTopMargin);
             const int buttonCount = 2;
             
             EditorGUILayoutComposer.DrawHorizontally(() =>
@@ -124,6 +135,6 @@ namespace Editor.Common
         private void ScrollListToBottom() =>
             _currentScroll = new(
                 _currentScroll.x,
-                EditorGUILayoutComposer.EditorLineHeight * _visibleLines);
+                EditorGUILayoutComposer.EditorLineHeight * VisibleLines);
     }
 }
