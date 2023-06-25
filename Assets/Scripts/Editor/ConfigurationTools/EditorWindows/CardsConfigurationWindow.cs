@@ -14,13 +14,16 @@ namespace Editor.ConfigurationTools.EditorWindows
         private const string EditorName = "Cards Configuration";
         private const string ResourceName = "CardsConfiguration";
         private const string ListPropertyName = "_cardSettings";
-        
+        private const int MinEditorHeight = 118;
+        private const int MinEditorLines = 3;
+
         private CardsConfiguration _target;
         private SerializedObject _serializedObject;
         private SerializedProperty _listProperty;
         private ListDrawer _listDrawer;
         private List<int> _searchResult;
         private string _searchPrompt = "";
+        private int _listLines;
 
         [MenuItem(CardsToolsPath + EditorName)]
         public static void ShowWindow()
@@ -133,8 +136,19 @@ namespace Editor.ConfigurationTools.EditorWindows
             if(_listDrawer is null)
                 InitListDrawer();
             
+            CorrectListSize();
+
             var filter = GetListFilter();
             _listDrawer!.DrawScrollable(filter);
+        }
+
+        private void CorrectListSize()
+        {
+            var windowHeight = rootVisualElement.worldBound.height;
+            var lineHeight = EditorGUILayoutComposer.EditorLineHeight;
+            
+            _listDrawer.VisibleLines = 
+                (int)((windowHeight - MinEditorHeight) / lineHeight + MinEditorLines);
         }
 
         private void AddElement()
