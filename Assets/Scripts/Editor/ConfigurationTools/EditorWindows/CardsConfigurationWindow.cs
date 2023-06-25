@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Configurations;
 using Editor.Common;
@@ -14,8 +15,9 @@ namespace Editor.ConfigurationTools.EditorWindows
         private const string EditorName = "Cards Configuration";
         private const string ResourceName = "CardsConfiguration";
         private const string ListPropertyName = "_cardSettings";
+        private const string AutoSaveSettingName = "CardsConfiguration_AutoSave";
         private const int MinEditorHeight = 118;
-        private const int MinEditorLines = 3;
+        private const int MinEditorLines = 2;
 
         private CardsConfiguration _target;
         private SerializedObject _serializedObject;
@@ -24,6 +26,7 @@ namespace Editor.ConfigurationTools.EditorWindows
         private List<int> _searchResult;
         private string _searchPrompt = "";
         private int _listLines;
+        private bool _autoSave;
 
         [MenuItem(CardsToolsPath + EditorName)]
         public static void ShowWindow()
@@ -37,11 +40,18 @@ namespace Editor.ConfigurationTools.EditorWindows
             UpdateSerialized();
 
             SetTitle();
+            DrawSaveSettingsBar();
             DrawSearchBar();
             DrawList();
             
             ApplyChanges();
         }
+
+        private void OnEnable() => 
+            _autoSave = EditorPrefs.GetBool(AutoSaveSettingName);
+
+        private void OnDisable() => 
+            EditorPrefs.SetBool(AutoSaveSettingName, _autoSave);
 
         public override void SaveChanges()
         {
@@ -131,6 +141,24 @@ namespace Editor.ConfigurationTools.EditorWindows
             });
         }
 
+        private void DrawSaveSettingsBar()
+        {
+            EditorGUILayoutComposer.DrawHorizontally(DrawBar);
+            
+            void DrawBar()
+            {
+                _autoSave = EditorGUILayout.Toggle("Auto-save", _autoSave);
+                EditorGUILayoutComposer.DrawToggling(DrawSaveButton, enabled:!_autoSave);
+            }
+
+            void DrawSaveButton()
+            {
+                var saving = EditorGUILayoutComposer.DrawMediumButton("Save");
+                if(saving)
+                    SaveChanges();
+            }
+        }
+
         private void DrawList()
         {
             if(_listDrawer is null)
@@ -174,8 +202,10 @@ namespace Editor.ConfigurationTools.EditorWindows
         private void ApplyChanges()
         {
             var modified = _serializedObject.ApplyModifiedProperties();
-            if (modified)
-                SaveChanges();
+            if (!modified || !_autoSave) 
+                return;
+            
+            SaveChanges();
         }
 
         private void CreateSerializedObjectIfNone() => 

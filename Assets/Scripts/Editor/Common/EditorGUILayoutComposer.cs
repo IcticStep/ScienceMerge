@@ -25,5 +25,24 @@ namespace Editor.Common
             drawCall.Invoke();
             EditorGUILayout.EndHorizontal();
         }
+
+        public static void DrawToggling(Action drawCall, bool enabled)
+        {
+            EditorGUI.BeginDisabledGroup(!enabled);
+            drawCall.Invoke();
+            EditorGUI.EndDisabledGroup();
+        }
+
+        public static bool DrawMiniButton(string label) =>
+            DrawMiniButton(label, EditorStyles.miniButton);
+        
+        public static bool DrawMiniButton(string label, GUIStyle style) =>
+            GUILayout.Button(label, style, EditorGUIStyles.SmallButtonStyle);
+
+        public static bool DrawMediumButton(string label) =>
+            DrawMediumButton(label, EditorStyles.miniButton);
+        
+        public static bool DrawMediumButton(string label, GUIStyle style) =>
+            GUILayout.Button(label, style, EditorGUIStyles.MediumButtonStyle);
     }
 }
