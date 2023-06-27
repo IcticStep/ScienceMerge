@@ -16,3 +16,4 @@ Early look of the game:
 - View and model are separated. You may find views in [Assets/Scripts/View](Assets/Scripts/View) and models in [Assets/Scripts/Model](Assets/Scripts/Model).
 - Designing pattern "state-machine" is used to make a merge-table in [Assets/Scripts/Model/Merging](Assets/Scripts/Model/Merging).
 - UniRx is used to make a timer in [Assets/Scripts/Model/Merging/TablesStates/MergingState.cs](Assets/Scripts/Model/Merging/TablesStates/MergingState.cs).
+- In MergeConfigurationTool branch editor window development is currently in progress; in CardsConfigurationTools branch custom inspector is implemented.
