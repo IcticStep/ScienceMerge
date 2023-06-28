@@ -136,8 +136,11 @@ namespace Editor.ConfigurationTools.EditorWindows
             SaveChanges();
         }
 
-        private void InitializeSavingSwitcher() => 
-            _savingSwitcher = new(SaveChanges);
+        private void InitializeSavingSwitcher()
+        {
+            _savingSwitcher = new(this);
+            _savingSwitcher.OnSave += SaveChanges;
+        }
 
         private void SetMinEditorSize() => 
             minSize = _minEditorSize;
