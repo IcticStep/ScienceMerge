@@ -2,6 +2,6 @@
 {
     public static class ConfigurationPaths
     {
-        public const string CardsToolsPath = "Tools/Cards/";
+        public const string CardsToolsMenuPath = "Tools/Cards/";
     }
 }
