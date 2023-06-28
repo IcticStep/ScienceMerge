@@ -15,17 +15,18 @@ namespace Editor.ConfigurationTools.EditorWindows
         private const string EditorName = "Cards Configuration";
         private const string ResourceName = "CardsConfiguration";
         private const string ListPropertyName = "_cardSettings";
+        
         private const int MinEditorLines = 2;
         private readonly Vector2 _minEditorSize = new(650, 118);
-
-        private CardsConfiguration _target;
-        private SerializedObject _serializedObject;
-        private SerializedProperty _listProperty;
+        
         private SavingSwitcher _savingSwitcher;
+        private ListSerializer<CardsConfiguration> _listSerializer;
         private ListDrawer _listDrawer;
         private List<int> _searchResult;
         private string _searchPrompt = "";
         private int _listLines;
+
+        private CardsConfiguration Target => _listSerializer.Target;
 
         [MenuItem(CardsToolsMenuPath + EditorName)]
         public static void ShowWindow()
@@ -65,26 +66,20 @@ namespace Editor.ConfigurationTools.EditorWindows
         private void Initialize()
         {
             InitializeSavingSwitcher();
+            InitializeListSerializer();
             SetMinEditorSize();
             Load();
-            CreateAssetIfNotExist();
-            CreateSerializedObjectIfNone();
-            UpdateSerialized();
             InitListDrawer();
         }
 
+        private void InitializeListSerializer() => 
+            _listSerializer = new(ResourceName, ListPropertyName);
+
         private void UpdateSerialized()
         {
-            if (_target is null)
-            {
-                Initialize();
-                return;
-            }
-
-            CreateSerializedObjectIfNone();
-            
-            _listProperty = _serializedObject.FindProperty(ListPropertyName);
-            _serializedObject.Update();
+            if(_listSerializer is null)
+                InitializeListSerializer();
+            _listSerializer!.UpdateSerialized();
         }
 
         private void SetTitle() => 
@@ -129,7 +124,7 @@ namespace Editor.ConfigurationTools.EditorWindows
 
         private void ApplyChanges()
         {
-            var modified = _serializedObject.ApplyModifiedProperties();
+            var modified = _listSerializer.ApplyModifiedProperties();
             if (!modified || !_savingSwitcher.AutoSave) 
                 return;
             
@@ -145,23 +140,9 @@ namespace Editor.ConfigurationTools.EditorWindows
         private void SetMinEditorSize() => 
             minSize = _minEditorSize;
 
-        private void CreateAssetIfNotExist()
-        {
-            if(_target is not null) 
-                return;
-            
-            _target = CreateInstance<CardsConfiguration>();
-            AssetDatabase.CreateAsset(_target, $"Assets/Configuration/Resources/{ResourceName}.asset");
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-        }
-
-        private void CreateSerializedObjectIfNone() => 
-            _serializedObject ??= new SerializedObject(_target);
-
         private void InitListDrawer()
         {
-            _listDrawer = new(_listProperty, addingItem: AddElement, visibleLines:10);
+            _listDrawer = new(_listSerializer.ListProperty, addingItem: AddElement, visibleLines:10);
             _listDrawer.OnStateChange += AddElement;
         }
 
@@ -174,7 +155,7 @@ namespace Editor.ConfigurationTools.EditorWindows
 
         private IEnumerable<int> Search()
         {
-            var settingsList = _target.CardSettingsList;
+            var settingsList = Target.CardSettingsList;
             return settingsList
                 .Where(x => x.Name.ToLowerInvariant().Contains(_searchPrompt))
                 .Select(x => x.Id)
@@ -192,7 +173,7 @@ namespace Editor.ConfigurationTools.EditorWindows
 
         private void AddElement()
         {
-            _target.AddEmptyCard();
+            Target.AddEmptyCard();
             Repaint();
             Save();
         }
@@ -210,14 +191,10 @@ namespace Editor.ConfigurationTools.EditorWindows
             return _searchResult;
         }
 
-        private void Load() => 
-            _target = Resources.Load<CardsConfiguration>(ResourceName);
+        private void Save() => 
+            _listSerializer.Save();
 
-        private void Save()
-        {
-            EditorUtility.SetDirty(_target);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-        }
+        private void Load() => 
+            _listSerializer.Load();
     }
 }
