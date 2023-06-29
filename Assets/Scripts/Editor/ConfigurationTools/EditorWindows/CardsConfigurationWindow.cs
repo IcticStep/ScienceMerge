@@ -6,7 +6,6 @@ using Editor.ConfigurationTools.Common;
 using UnityEditor;
 using UnityEngine;
 using static Editor.ConfigurationTools.Common.ConfigurationPaths;
-using static Editor.Common.EditorGUIStyles;
 
 namespace Editor.ConfigurationTools.EditorWindows
 {
@@ -21,9 +20,8 @@ namespace Editor.ConfigurationTools.EditorWindows
         
         private SavingSwitcher _savingSwitcher;
         private ListSerializer<CardsConfiguration> _listSerializer;
+        private ListSearcher _listSearcher;
         private ListDrawer _listDrawer;
-        private List<int> _searchResult;
-        private string _searchPrompt = "";
         private int _listLines;
 
         private CardsConfiguration Target => _listSerializer.Target;
@@ -67,6 +65,7 @@ namespace Editor.ConfigurationTools.EditorWindows
         {
             InitializeSavingSwitcher();
             InitializeListSerializer();
+            InitializeListSearcher();
             SetMinEditorSize();
             Load();
             InitListDrawer();
@@ -88,28 +87,8 @@ namespace Editor.ConfigurationTools.EditorWindows
         private void DrawSaveSettingsBar() => 
             _savingSwitcher.DrawSettingsBar();
 
-        private void DrawSearchBar()
-        {
-            const float averageLengthOfButton = 1.435f;
-            const int buttonCount = 2;
-            
-            var searchFieldStyle =
-                GUILayout.Width(EditorGUIUtility.currentViewWidth - buttonCount *(averageLengthOfButton * SmallButtonWidth));
-
-            EditorGUILayoutComposer.DrawHorizontally(() =>
-            {
-                EditorGUI.BeginChangeCheck();
-                _searchPrompt = GUILayout.TextField(_searchPrompt, EditorStyles.toolbarSearchField, searchFieldStyle)
-                    .ToLowerInvariant();
-                if(EditorGUI.EndChangeCheck())
-                    _searchResult = Search().ToList();
-                
-                if(GUILayout.Button(ClearSearchButtonLabel, EditorStyles.toolbarButton, SmallButtonStyle))
-                    ClearSearch();
-                
-                DrawSortButton();
-            });
-        }
+        private void DrawSearchBar() => 
+            _listSearcher.DrawSearchBar();
 
         private void DrawList()
         {
@@ -117,9 +96,7 @@ namespace Editor.ConfigurationTools.EditorWindows
                 InitListDrawer();
             
             CorrectListSize();
-
-            var filter = GetListFilter();
-            _listDrawer!.DrawScrollable(filter);
+            _listDrawer!.DrawScrollable(_listSearcher.ListFilter);
         }
 
         private void ApplyChanges()
@@ -137,6 +114,9 @@ namespace Editor.ConfigurationTools.EditorWindows
             _savingSwitcher.OnSave += SaveChanges;
         }
 
+        private void InitializeListSearcher() => 
+            _listSearcher = new(Search);
+
         private void SetMinEditorSize() => 
             minSize = _minEditorSize;
 
@@ -146,18 +126,11 @@ namespace Editor.ConfigurationTools.EditorWindows
             _listDrawer.OnStateChange += AddElement;
         }
 
-        private void DrawSortButton()
-        {
-            GUILayout.FlexibleSpace();
-            if (GUILayout.Button(UpdateOrderButtonLabel, EditorStyles.miniButton, MediumButtonStyle))
-                Search();
-        }
-
-        private IEnumerable<int> Search()
+        private IEnumerable<int> Search(string searchPrompt)
         {
             var settingsList = Target.CardSettingsList;
             return settingsList
-                .Where(x => x.Name.ToLowerInvariant().Contains(_searchPrompt))
+                .Where(x => x.Name.ToLowerInvariant().Contains(searchPrompt))
                 .Select(x => x.Id)
                 .ToList();
         }
@@ -176,19 +149,6 @@ namespace Editor.ConfigurationTools.EditorWindows
             Target.AddEmptyCard();
             Repaint();
             Save();
-        }
-
-        private void ClearSearch()
-        {
-            _searchPrompt = "";
-            _searchResult = default;
-        }
-
-        private IEnumerable<int> GetListFilter()
-        {
-            if (string.IsNullOrEmpty(_searchPrompt) || _searchResult is null)
-                return null;
-            return _searchResult;
         }
 
         private void Save() => 
