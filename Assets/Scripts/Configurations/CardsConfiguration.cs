@@ -9,8 +9,7 @@ namespace Configurations
     [CreateAssetMenu(fileName = nameof(CardsConfiguration), menuName = "ScriptableObjects/"+nameof(CardsConfiguration))]
     public class CardsConfiguration : ScriptableObject
     {
-        [FormerlySerializedAs("_cardSetting")] [SerializeField]
-        private List<CardSettings> _cardSettings;
+        [SerializeField] private List<CardSettings> _cardSettings;
 
         public IReadOnlyList<CardSettings> CardSettingsList => _cardSettings;
 

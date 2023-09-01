@@ -18,12 +18,27 @@ namespace Editor.Common
             drawCall.Invoke();
             EditorGUILayout.EndScrollView();
         }
+        
+        public static void DrawNonScrollable(Action drawCall, int showLines = DefaultLinesVisible)
+        {
+            var height = EditorLineHeight * showLines;
+            EditorGUILayout.BeginScrollView(Vector2.zero, EditorStyles.helpBox, GUILayout.Height(height));
+            drawCall.Invoke();
+            EditorGUILayout.EndScrollView();
+        }
 
         public static void DrawHorizontally(Action drawCall)
         {
             EditorGUILayout.BeginHorizontal();
             drawCall.Invoke();
             EditorGUILayout.EndHorizontal();
+        }
+        
+        public static void DrawVertically(Action drawCall, params GUILayoutOption[] options)
+        {
+            EditorGUILayout.BeginVertical(options);
+            drawCall.Invoke();
+            EditorGUILayout.EndVertical();
         }
 
         public static void DrawToggling(Action drawCall, bool enabled)

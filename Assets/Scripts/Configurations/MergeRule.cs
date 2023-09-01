@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Model.Cards;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Configurations
 {
     [Serializable]
     public class MergeRule
     {
-        [SerializeField] private List<Card> _cards;
+        [SerializeField] private List<int> _cards = new();
+        [SerializeField] private int _resultID;
         
-        [field: SerializeField]
-        public int ResultID { get; private set; }
+        public int ResultID => _resultID;
 
-        public IReadOnlyList<int> CardsID => _cards.Select(card => card.Id).ToList();
+        public IReadOnlyList<int> CardsID => _cards.ToList();
 
         public override bool Equals(object obj)
         {

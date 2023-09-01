@@ -606,6 +606,7 @@ SortingGroup:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!114 &3248298389324267731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -622,6 +623,7 @@ MonoBehaviour:
   _resourceRenderer: {fileID: 8691026548591678817}
   _titleText: {fileID: 8691026549013657091}
   _timeText: {fileID: 8691026549040871267}
+  _cardsCountText: {fileID: 0}
 --- !u!1 &8691026548784400004
 GameObject:
   m_ObjectHideFlags: 0
