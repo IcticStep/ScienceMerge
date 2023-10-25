@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: MergeConfiguration
   m_EditorClassIdentifier: 
   _mergeRules:
-  - _cardsID: 0000000001000000
-    <ResultID>k__BackingField: 4
+  - _cards: 0000000000000000
+    _resultID: 0
+  - _cards: 
+    _resultID: 0

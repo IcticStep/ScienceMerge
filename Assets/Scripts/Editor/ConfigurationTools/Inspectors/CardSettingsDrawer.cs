@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Configurations;
+using Editor.Common;
 using UnityEditor;
 using UnityEngine;
-using Editor.Common;
 
-namespace Editor.ConfigurationTools
+namespace Editor.ConfigurationTools.Inspectors
 {
     [CustomPropertyDrawer(typeof(CardSettings))]
     public class CardSettingsDrawer : PropertyDrawer

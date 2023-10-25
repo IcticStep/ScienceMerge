@@ -8,13 +8,12 @@ namespace Configurations
     [Serializable]
     public class MergeRule
     {
-        [SerializeField] 
-        private List<int> _cardsID;
+        [SerializeField] private List<int> _cards = new();
+        [SerializeField] private int _resultID;
         
-        [field: SerializeField]
-        public int ResultID { get; private set; }
+        public int ResultID => _resultID;
 
-        public IReadOnlyList<int> CardsID => _cardsID;
+        public IReadOnlyList<int> CardsID => _cards.ToList();
 
         public override bool Equals(object obj)
         {
@@ -27,6 +26,6 @@ namespace Configurations
             return CardsID.All(card => other.CardsID.Contains(card));
         }
 
-        public override int GetHashCode() => HashCode.Combine(_cardsID, ResultID);
+        public override int GetHashCode() => HashCode.Combine(_cards, ResultID);
     }
 }

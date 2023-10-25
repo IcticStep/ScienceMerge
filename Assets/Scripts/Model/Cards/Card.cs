@@ -2,6 +2,7 @@ using System;
 
 namespace Model.Cards
 {
+    [Serializable]
     public class Card
     {
         public Card(int id, string name, TimeSpan mergeTime, int price)
