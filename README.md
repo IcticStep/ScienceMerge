@@ -1,11 +1,11 @@
 # ScienceMerge
 ## Overview
-2d game for android on Unity based on mechanic of merge cards. Development still in progress, most features aren't implemented yet.
+2d game-demo made in Unity based on mechanic of merge cards.
 Technologies: Extenject(Zenject), UniRx.
 
 Early look of the game:
 
-![early look of the game](https://github.com/IcticStep/ScienceMerge/assets/59373161/d40191cd-a934-40fd-af57-93e60d477de8)
+![look of the demo](https://github.com/IcticStep/ScienceMerge/assets/59373161/d40191cd-a934-40fd-af57-93e60d477de8)
 
 ## Setting up
 1. Download the project.
